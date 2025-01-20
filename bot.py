@@ -91,7 +91,7 @@ class MovingAverageCrossoverML:
                     f"Final Signal distribution: {live_data['Signal'].value_counts().to_dict() if 'Signal' in live_data else 'No Signals'}")
 
                 # Train the model if it is not yet trained, or if this is the first cycle
-                if not hasattr(self.model, 'n_features_'):
+                if self.model is None or not hasattr(self.model, 'n_features_'):
                     self.logger.info(f"Model is not trained. Training the model with data for {symbol}...")
                     if not self.model.train_model(live_data):  # Train the model with available data
                         self.logger.error("Model validation failed after training in the run cycle.")

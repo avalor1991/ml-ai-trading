@@ -138,16 +138,22 @@ class Model:
             accuracy = accuracy_score(y_test, y_pred)
             self.logger.info(f"Model trained successfully with accuracy: {accuracy * 100:.2f}%.")
 
-            self.model.n_features_ = X_train.shape[1]  # Ensure n_features_ is set correctly
-            self.logger.info(f"Model successfully trained. Number of features used: {self.model.n_features_}.")
         except Exception as e:
             self.logger.error(f"Model training failed with exception: {e}")
             return False  # Indicate training failure
+
+        try:
+            self.model.n_features_ = X_train.shape[1]  # Ensure n_features_ is set
+            self.logger.info(f"Model successfully trained. Number of features used: {self.model.n_features_}.")
+        except Exception as e:
+            self.logger.error(f"Failed to set or log model attributes: {e}")
+            return False
 
         self.logger.info(f"Model state after training: {self.model}")
         self.logger.info(f"Model parameters: {self.model.get_params()}")
 
         return True  # Indicate training success
+
 
     def predict_signal(self, data):
         if data is None or data.empty:
